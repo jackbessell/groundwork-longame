@@ -3,13 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#e8e0d0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 20px}
-#gw{font-family:'DM Sans',sans-serif;background:#f5f0e8;padding:28px;border-radius:4px;max-width:680px;width:100%}
+#gw-wrap{font-family:'DM Sans',sans-serif;background:#f5f0e8;max-width:680px;width:100%;border-radius:4px;overflow:hidden}
+.gw-cover{background:#2d4a2d;padding:32px 36px 28px}
+.gw-cover-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.gw-cover-tag{font-family:'DM Sans',sans-serif;font-size:9px;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;color:#9fbc9f}
+.gw-cover-menu{display:flex;flex-direction:column;gap:4px;opacity:0.6}
+.gw-cover-menu span{display:block;width:20px;height:0.8px;background:#f5f0e8}
+.gw-cover-rule-top{height:0.5px;background:#4a6b4a;margin-bottom:16px}
+.gw-cover-title{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;color:#f5f0e8;line-height:1.05;letter-spacing:0.01em}
+.gw-cover-title-italic{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;font-style:italic;color:#c8d4b8;line-height:1.05;letter-spacing:0.01em}
+.gw-cover-rule-bottom{height:0.5px;background:#4a6b4a;margin-top:20px;margin-bottom:14px}
+.gw-cover-desc{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#9fbc9f;line-height:1.6;max-width:480px}
+.gw-cover-footer{display:flex;justify-content:flex-end;margin-top:16px}
+.gw-cover-meta span{display:block;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:#6a8f6a;line-height:1.8;text-align:right}
+#gw{padding:22px 28px 28px}
 .gw-header{text-align:center;padding-bottom:14px;border-bottom:0.5px solid #c8bfa8;margin-bottom:18px}
-.gw-header h1{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;color:#2d4a2d;letter-spacing:0.02em}
+.gw-header h1{font-family:'Playfair Display',serif;font-size:15px;font-weight:400;color:#2d4a2d;letter-spacing:0.02em}
 .gw-header p{font-size:11px;color:#4a5560;margin-top:4px;font-weight:300;letter-spacing:0.05em}
 .gw-sitka{background:#ede5d4;border-left:2px solid #b87333;padding:10px 14px;margin-bottom:16px;font-size:11px;line-height:1.6;font-weight:300;font-style:italic;color:#4a3d28}
 .gw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
@@ -32,132 +45,104 @@ body{background:#e8e0d0;display:flex;justify-content:center;align-items:flex-sta
 .gw-footer{margin-top:14px;text-align:center}
 .gw-caveat{font-size:9px;color:#888780;font-weight:300;letter-spacing:0.03em;font-style:italic}
 .gw-caption{font-size:9px;color:#888780;font-weight:300;letter-spacing:0.04em;margin-top:4px}
-@media(max-width:500px){.gw-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.gw-grid{grid-template-columns:repeat(2,1fr)}.gw-cover-title,.gw-cover-title-italic{font-size:36px}}
 </style>
 </head>
 <body>
-<div id="gw">
-  <div class="gw-header">
-    <h1>Scotland's land funding mechanisms</h1>
-    <p>Select a mechanism to see what it optimises for, and where nature fits</p>
-  </div>
-
-  <div class="gw-sitka">Two neighbouring landholders. One removing thousands of Sitka spruce to restore peatland carbon. The other planting thousands more for timber yield. Neither made a bad decision. The system produced that outcome.</div>
-
-  <div class="gw-grid" id="gw-grid"></div>
-
-  <div class="gw-bars">
-    <div class="gw-bar-row">
-      <span class="gw-bar-label">Carbon output</span>
-      <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-carbon" style="width:0%;background:#5a8f5a"></div></div>
+<div id="gw-wrap">
+  <div class="gw-cover">
+    <div class="gw-cover-top">
+      <div class="gw-cover-tag">A quarterly publication</div>
+      <div class="gw-cover-menu"><span></span><span></span></div>
     </div>
-    <div class="gw-bar-row">
-      <span class="gw-bar-label">Timber yield</span>
-      <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-timber" style="width:0%;background:#8b6914"></div></div>
-    </div>
-    <div class="gw-bar-row">
-      <span class="gw-bar-label">Agricultural output</span>
-      <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-agri" style="width:0%;background:#b87333"></div></div>
-    </div>
-    <div class="gw-bar-row">
-      <span class="gw-bar-label">Biodiversity</span>
-      <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-bio" style="width:0%;background:#2d6a8f"></div></div>
-    </div>
-    <div class="gw-bar-row">
-      <span class="gw-bar-label">Ecosystem services</span>
-      <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-eco" style="width:0%;background:#7a8f8a"></div></div>
+    <div class="gw-cover-rule-top"></div>
+    <div class="gw-cover-title">Ground Work,</div>
+    <div class="gw-cover-title-italic">the long game</div>
+    <div class="gw-cover-rule-bottom"></div>
+    <div class="gw-cover-desc">The operational, commercial, and structural problems in nature recovery. Practitioner thinking out loud.</div>
+    <div class="gw-cover-footer">
+      <div class="gw-cover-meta">
+        <span>Jack Bessell</span>
+        <span>Scotland · Quarterly</span>
+      </div>
     </div>
   </div>
 
-  <div class="gw-panel" id="gw-panel">
-    <div class="gw-placeholder">Select a mechanism above to explore what it optimises for and where nature fits in the hierarchy.</div>
-  </div>
+  <div id="gw">
+    <div class="gw-header">
+      <h1>Scotland's land funding mechanisms</h1>
+      <p>Select a mechanism to see what it optimises for, and where nature fits</p>
+    </div>
 
-  <div class="gw-footer">
-    <div class="gw-caveat">Relative outputs are illustrative. They are not independently verified data.</div>
-    <div class="gw-caption">Ground Work, the long game — Jack Bessell</div>
+    <div class="gw-sitka">Two neighbouring landholders. One removing thousands of Sitka spruce to restore peatland carbon. The other planting thousands more for timber yield. Neither made a bad decision. The system produced that outcome.</div>
+
+    <div class="gw-grid" id="gw-grid"></div>
+
+    <div class="gw-bars">
+      <div class="gw-bar-row">
+        <span class="gw-bar-label">Carbon output</span>
+        <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-carbon" style="width:0%;background:#5a8f5a"></div></div>
+      </div>
+      <div class="gw-bar-row">
+        <span class="gw-bar-label">Timber yield</span>
+        <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-timber" style="width:0%;background:#8b6914"></div></div>
+      </div>
+      <div class="gw-bar-row">
+        <span class="gw-bar-label">Agricultural output</span>
+        <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-agri" style="width:0%;background:#b87333"></div></div>
+      </div>
+      <div class="gw-bar-row">
+        <span class="gw-bar-label">Biodiversity</span>
+        <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-bio" style="width:0%;background:#2d6a8f"></div></div>
+      </div>
+      <div class="gw-bar-row">
+        <span class="gw-bar-label">Ecosystem services</span>
+        <div class="gw-bar-track"><div class="gw-bar-fill" id="bar-eco" style="width:0%;background:#7a8f8a"></div></div>
+      </div>
+    </div>
+
+    <div class="gw-panel" id="gw-panel">
+      <div class="gw-placeholder">Select a mechanism above to explore what it optimises for and where nature fits in the hierarchy.</div>
+    </div>
+
+    <div class="gw-footer">
+      <div class="gw-caveat">Relative outputs are illustrative. They are not independently verified data.</div>
+      <div class="gw-caption">Ground Work, the long game — Jack Bessell</div>
+    </div>
   </div>
 </div>
 
 <script>
-const mechanisms = [
-  {
-    id:'carbon',
-    tag:'Carbon markets',
-    color:'#3d6b3d',
-    tagColor:'#2d4a2d',
-    title:'Peatland & woodland carbon',
-    bars:{carbon:88,timber:10,agri:5,bio:45,eco:50},
-    panel_tag:'What it optimises for',
-    panel_title:'Carbon sequestration above all else',
-    body:'Carbon mechanisms fund restoration that sequesters carbon. At its best this aligns well with nature recovery. Peatland restoration is genuinely good for biodiversity. But the metric is tonnes of carbon, not ecological complexity. Projects are designed and verified against carbon outputs. Where trade-offs arise, the carbon metric takes precedence.'
-  },
-  {
-    id:'forestry',
-    tag:'Forestry grants',
-    color:'#5a4a1a',
-    tagColor:'#3d3010',
-    title:'Woodland creation & management',
-    bars:{carbon:55,timber:90,agri:15,bio:28,eco:30},
-    panel_tag:'What it optimises for',
-    panel_title:'Productive timber above complexity',
-    body:'Forestry grant schemes support woodland creation and management, and have shifted meaningfully toward native species in recent years. But the underlying economics still favour productive timber. High density, commercially viable species, straight rows. The self-seeding Sitka story is this mechanism working exactly as designed. The landholder responded rationally to what was funded.'
-  },
-  {
-    id:'agri',
-    tag:'Agricultural support',
-    color:'#7a5a1a',
-    tagColor:'#5a3d0a',
-    title:'AECS & farm support',
-    bars:{carbon:30,timber:5,agri:92,bio:35,eco:38},
-    panel_tag:'What it optimises for',
-    panel_title:'Agricultural productivity as the primary objective',
-    body:'Agricultural support in Scotland has nature conditions attached, but the primary objective is farm viability and food production. AECS offers environmental payments on top of a system built around productive land use. The incentive architecture rewards compliance with environmental conditions, not ecological ambition. Nature recovery is the side condition, not the target.'
-  },
-  {
-    id:'biodiversity',
-    tag:'Biodiversity outcomes',
-    color:'#1a4a6b',
-    tagColor:'#0a2d4a',
-    title:'Biodiversity outcome funding',
-    bars:{carbon:60,timber:40,agri:45,bio:90,eco:88},
-    panel_tag:'What is changing',
-    panel_title:'The first mechanism that values the whole',
-    body:'Biodiversity outcome funding is structurally different from every mechanism that preceded it. It does not ask nature to be a side condition of carbon, timber, or agriculture. It pays for ecological function directly. And because functioning ecosystems produce carbon, water regulation, soil health, and resilience simultaneously, it is the first mechanism whose incentive architecture does not push against the others.'
-  }
+const mechanisms=[
+  {id:'carbon',tag:'Carbon markets',color:'#3d6b3d',tagColor:'#2d4a2d',title:'Peatland & woodland carbon',bars:{carbon:88,timber:10,agri:5,bio:45,eco:50},panel_tag:'What it optimises for',panel_title:'Carbon sequestration above all else',body:'Carbon mechanisms fund restoration that sequesters carbon. At its best this aligns well with nature recovery. Peatland restoration is genuinely good for biodiversity. But the metric is tonnes of carbon, not ecological complexity. Projects are designed and verified against carbon outputs. Where trade-offs arise, the carbon metric takes precedence.'},
+  {id:'forestry',tag:'Forestry grants',color:'#5a4a1a',tagColor:'#3d3010',title:'Woodland creation & management',bars:{carbon:55,timber:90,agri:15,bio:28,eco:30},panel_tag:'What it optimises for',panel_title:'Productive timber above complexity',body:'Forestry grant schemes support woodland creation and management, and have shifted meaningfully toward native species in recent years. But the underlying economics still favour productive timber. High density, commercially viable species, straight rows. The self-seeding Sitka story is this mechanism working exactly as designed. The landholder responded rationally to what was funded.'},
+  {id:'agri',tag:'Agricultural support',color:'#7a5a1a',tagColor:'#5a3d0a',title:'AECS & farm support',bars:{carbon:30,timber:5,agri:92,bio:35,eco:38},panel_tag:'What it optimises for',panel_title:'Agricultural productivity as the primary objective',body:'Agricultural support in Scotland has nature conditions attached, but the primary objective is farm viability and food production. AECS offers environmental payments on top of a system built around productive land use. The incentive architecture rewards compliance with environmental conditions, not ecological ambition. Nature recovery is the side condition, not the target.'},
+  {id:'biodiversity',tag:'Biodiversity outcomes',color:'#1a4a6b',tagColor:'#0a2d4a',title:'Biodiversity outcome funding',bars:{carbon:60,timber:40,agri:45,bio:90,eco:88},panel_tag:'What is changing',panel_title:'The first mechanism that values the whole',body:'Biodiversity outcome funding is structurally different from every mechanism that preceded it. It does not ask nature to be a side condition of carbon, timber, or agriculture. It pays for ecological function directly. And because functioning ecosystems produce carbon, water regulation, soil health, and resilience simultaneously, it is the first mechanism whose incentive architecture does not push against the others.'}
 ];
 
-const grid = document.getElementById('gw-grid');
-const panel = document.getElementById('gw-panel');
+const grid=document.getElementById('gw-grid');
+const panel=document.getElementById('gw-panel');
 
-mechanisms.forEach(m => {
-  const card = document.createElement('div');
-  card.className = 'gw-card';
-  card.id = 'card-' + m.id;
-  card.innerHTML = '<div class="gw-card-tag" style="color:'+m.tagColor+'">'+m.tag+'</div><div class="gw-card-title">'+m.title+'</div>';
-  card.onclick = function(){ select(m.id); };
+mechanisms.forEach(function(m){
+  const card=document.createElement('div');
+  card.className='gw-card';
+  card.id='card-'+m.id;
+  card.innerHTML='<div class="gw-card-tag" style="color:'+m.tagColor+'">'+m.tag+'</div><div class="gw-card-title">'+m.title+'</div>';
+  card.onclick=function(){select(m.id);};
   grid.appendChild(card);
 });
 
-function select(id) {
-  const m = mechanisms.find(function(x){ return x.id === id; });
-  if (!m) return;
-  document.querySelectorAll('.gw-card').forEach(function(c){
-    c.classList.remove('active');
-    c.style.borderColor = '';
-  });
-  const card = document.getElementById('card-' + id);
+function select(id){
+  const m=mechanisms.find(function(x){return x.id===id;});
+  if(!m)return;
+  document.querySelectorAll('.gw-card').forEach(function(c){c.classList.remove('active');c.style.borderColor='';});
+  const card=document.getElementById('card-'+id);
   card.classList.add('active');
-  card.style.borderColor = m.color;
-  ['carbon','timber','agri','bio','eco'].forEach(function(k){
-    document.getElementById('bar-' + k).style.width = m.bars[k] + '%';
-  });
-  panel.className = 'gw-panel active';
-  panel.style.borderColor = m.color;
-  panel.innerHTML =
-    '<div class="gw-panel-tag" style="color:'+m.tagColor+'">'+m.panel_tag+'</div>' +
-    '<div class="gw-panel-title">'+m.panel_title+'</div>' +
-    '<div class="gw-panel-body">'+m.body+'</div>';
+  card.style.borderColor=m.color;
+  ['carbon','timber','agri','bio','eco'].forEach(function(k){document.getElementById('bar-'+k).style.width=m.bars[k]+'%';});
+  panel.className='gw-panel active';
+  panel.style.borderColor=m.color;
+  panel.innerHTML='<div class="gw-panel-tag" style="color:'+m.tagColor+'">'+m.panel_tag+'</div><div class="gw-panel-title">'+m.panel_title+'</div><div class="gw-panel-body">'+m.body+'</div>';
 }
 </script>
 </body>
