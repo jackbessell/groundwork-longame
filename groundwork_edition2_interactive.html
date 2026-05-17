@@ -27,6 +27,12 @@
     font-family: 'DM Sans', sans-serif;
     background: #e8e0d0;
     min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .page-wrap {
+    max-width: 680px;
+    margin: 0 auto;
   }
 
   /* ── HEADER ── */
@@ -122,9 +128,7 @@
 
   /* ── TOOL WRAPPER ── */
   .tool-page {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 48px 20px 64px;
+    padding: 48px 24px 64px;
   }
 
   .tool-heading {
@@ -309,6 +313,8 @@
 </head>
 <body>
 
+<div class="page-wrap">
+
 <!-- Publication header -->
 <header class="pub-header">
   <div class="pub-header-top">
@@ -326,6 +332,8 @@
     Ground Work,
     <em>the long game</em>
   </div>
+
+  <hr class="pub-rule">
 
   <p class="pub-desc">The operational, commercial, and structural problems in nature recovery. Practitioner thinking out loud.</p>
 
@@ -380,7 +388,8 @@
     Ground Work, the long game — Jack Bessell
   </div>
 
-</div>
+</div><!-- end tool-page -->
+</div><!-- end page-wrap -->
 
 <script>
 const COLORS = {
