@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Ground Work — Edition 2</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f5f0e8;
+    --parchment: #ede5d4;
+    --moss: #2d4a2d;
+    --moss-light: #5a8f5a;
+    --peat: #4a3d28;
+    --amber: #b87333;
+    --amber-light: #d4904a;
+    --slate: #1a4a6b;
+    --slate-light: #2d6a8f;
+    --ink: #2c2418;
+    --muted: #888780;
+    --border: #c8bfa8;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #e8e0d0;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .pub-header {
+    background: var(--moss);
+    border-left: 10px solid var(--amber);
+    padding: 28px 48px 44px 48px;
+    position: relative;
+  }
+
+  .pub-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .pub-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.42);
+  }
+
+  .pub-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    opacity: 0.45;
+  }
+
+  .pub-menu span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: var(--cream);
+  }
+
+  .pub-menu span:last-child {
+    width: 14px;
+  }
+
+  .pub-rule {
+    border: none;
+    border-top: 0.5px solid rgba(245,240,232,0.18);
+    margin: 0 0 28px;
+  }
+
+  .pub-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 62px;
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.08;
+    letter-spacing: 0.01em;
+  }
+
+  .pub-title em {
+    font-style: italic;
+    display: block;
+  }
+
+  .pub-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.65;
+    max-width: 480px;
+    margin: 24px 0 36px;
+  }
+
+  .pub-byline {
+    text-align: right;
+  }
+
+  .pub-byline-name {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.55);
+    margin-bottom: 3px;
+  }
+
+  .pub-byline-geo {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.32);
+  }
+
+  /* ── TOOL WRAPPER ── */
+  .tool-page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 20px 64px;
+  }
+
+  .tool-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--moss);
+    text-align: center;
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .tool-sub {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .tool-rule {
+    border: none;
+    border-top: 0.5px solid var(--border);
+    margin: 0 0 20px;
+  }
+
+  /* ── TOOL CARD ── */
+  .tool-block {
+    background: var(--cream);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .tool-inner {
+    padding: 24px 24px 0;
+  }
+
+  .tool-instruction {
+    background: var(--parchment);
+    border-left: 2px solid var(--amber);
+    padding: 9px 14px;
+    margin-bottom: 16px;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--peat);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .tool-legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tl-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--peat);
+  }
+
+  .tl-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .tl-line {
+    width: 20px;
+    height: 2px;
+    flex-shrink: 0;
+  }
+
+  #canvas-wrap {
+    position: relative;
+    overflow: hidden;
+    background: var(--cream);
+  }
+
+  #map-canvas {
+    display: block;
+    width: 100%;
+    cursor: default;
+  }
+
+  /* ── TOOLTIP ── */
+  #tooltip {
+    position: absolute;
+    background: var(--cream);
+    border: 1px solid var(--slate);
+    border-radius: 6px;
+    padding: 13px 15px;
+    max-width: 240px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    z-index: 10;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.11);
+  }
+
+  #tooltip.visible { opacity: 1; }
+
+  .tt-tag {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tt-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .tt-body {
+    font-size: 10px;
+    line-height: 1.65;
+    color: var(--peat);
+    font-weight: 300;
+    margin-bottom: 7px;
+  }
+
+  .tt-question {
+    font-size: 9.5px;
+    font-style: italic;
+    color: var(--slate);
+    line-height: 1.5;
+    border-top: 0.5px solid var(--border);
+    padding-top: 6px;
+    font-weight: 400;
+  }
+
+  .tt-question::before {
+    content: "↳ ";
+    opacity: 0.6;
+  }
+
+  .tool-caption {
+    font-size: 10px;
+    font-style: italic;
+    color: var(--muted);
+    text-align: center;
+    padding: 12px 24px 16px;
+    font-weight: 300;
+    line-height: 1.5;
+    border-top: 0.5px solid var(--border);
+  }
+
+  /* ── EDITION NOTE ── */
+  .edition-note {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .edition-note a {
+    color: var(--slate);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--slate);
+    padding-bottom: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Publication header -->
+<header class="pub-header">
+  <div class="pub-header-top">
+    <span class="pub-label">A Quarterly Publication</span>
+    <div class="pub-menu">
+      <span></span>
+      <span></span>
+      <span style="width:14px"></span>
+    </div>
+  </div>
+
+  <hr class="pub-rule">
+
+  <div class="pub-title">
+    Ground Work,
+    <em>the long game</em>
+  </div>
+
+  <p class="pub-desc">The operational, commercial, and structural problems in nature recovery. Practitioner thinking out loud.</p>
+
+  <div class="pub-byline">
+    <div class="pub-byline-name">Jack Bessell</div>
+    <div class="pub-byline-geo">United Kingdom &middot; Quarterly</div>
+  </div>
+</header>
+
+<!-- Tool -->
+<div class="tool-page">
+
+  <div class="tool-heading">One outcome. Every consequence.</div>
+  <div class="tool-sub">Edition 2 &nbsp;·&nbsp; July 2026</div>
+
+  <hr class="tool-rule">
+
+  <div class="tool-block">
+    <div class="tool-inner">
+
+      <div class="tool-instruction">Deer fencing for natural regeneration looks like a single decision. Hover over any node to see what it pulls behind it — across time, seasons, commercials, ecology, and the people who will still be delivering this in thirty years.</div>
+
+      <div class="tool-legend">
+        <div class="tl-item"><div class="tl-dot" style="background:#2d4a2d"></div>Ecological</div>
+        <div class="tl-item"><div class="tl-dot" style="background:#1a4a6b"></div>Commercial</div>
+        <div class="tl-item"><div class="tl-dot" style="background:#b87333"></div>Logistical</div>
+        <div class="tl-item"><div class="tl-dot" style="background:#7a5c8a"></div>Philosophical</div>
+        <div class="tl-item">
+          <div class="tl-line" style="border-top:1.5px dashed #d4904a"></div>
+          Stacking benefit
+        </div>
+        <div class="tl-item">
+          <div class="tl-line" style="background:#c8bfa8;height:1.5px"></div>
+          Dependency
+        </div>
+      </div>
+
+      <div id="canvas-wrap">
+        <canvas id="map-canvas"></canvas>
+        <div id="tooltip">
+          <div class="tt-tag"  id="tt-tag"></div>
+          <div class="tt-title" id="tt-title"></div>
+          <div class="tt-body"  id="tt-body"></div>
+          <div class="tt-question" id="tt-question"></div>
+        </div>
+      </div>
+    </div>
+    <div class="tool-caption"><em>Each node is a decision. Each connection is a consequence. The stacking benefits are where constraint produces unexpected value.</em></div>
+  </div>
+
+  <div class="edition-note">
+    Ground Work, the long game — Jack Bessell
+  </div>
+
+</div>
+
+<script>
+const COLORS = {
+  cream: '#f5f0e8', parchment: '#ede5d4',
+  moss: '#2d4a2d', mossLight: '#5a8f5a',
+  peat: '#4a3d28', amber: '#b87333', amberLight: '#d4904a',
+  slate: '#1a4a6b', slateLight: '#2d6a8f',
+  ink: '#2c2418', muted: '#888780', border: '#c8bfa8',
+  purple: '#7a5c8a',
+};
+
+const nodes = [
+  { id:'fence',     label:'Deer fencing',        sub:'Year 1–2',           x:0.5,  y:0.16, type:'commercial',   color:COLORS.slate,      size:20, tag:'Commercial · Year 1',               title:'Upfront capital expenditure',          body:'Deer fencing is typically one of the largest single capital costs in a natural regeneration project. It arrives early, before any ecological benefit is visible, and it shapes every budget conversation that follows.',                                                                                                                          question:'Have you modelled this cost against your total investment envelope — not just installation, but repair cycles across 30 years?' },
+  { id:'regen',     label:'Natural regeneration', sub:'Ecological outcome', x:0.5,  y:0.46, type:'ecological',   color:COLORS.moss,       size:24, tag:'Ecological · Primary outcome',       title:'Natural regeneration',                 body:'The fencing creates the conditions. But regeneration is not a passive process — it depends on seed source proximity, soil condition, browsing pressure inside the fence, and decades of adaptive management.',                                                                                                                               question:'What is your seed source? And who will be monitoring and adapting the management plan in year 15?' },
+  { id:'repair',    label:'Fence repair',         sub:'Ongoing',            x:0.17, y:0.27, type:'logistical',   color:COLORS.amber,      size:15, tag:'Logistical · Ongoing',               title:'Fence repair and maintenance',         body:'Fences fail. Weather, deer pressure, and time degrade infrastructure that your ecological outcomes depend on. The contractor who installed it may not be operating in your area in year eight.',                                                                                                                                    question:'Have you identified who will repair the fencing — and whether they will still be available and affordable in a decade?' },
+  { id:'stalking',  label:'Deer stalking',        sub:'Cull management',    x:0.83, y:0.27, type:'logistical',   color:COLORS.amber,      size:15, tag:'Logistical · Seasonal',              title:'Stalking and cull management',         body:'Even with fencing, deer pressure outside and incursion management inside requires an active cull plan. Stalking is seasonal, relationship-dependent, and tied to local availability.',                                                                                                                                    question:'Do you have a stalker relationship in place — and does your cull philosophy align with how they operate?' },
+  { id:'philosophy',label:'Cull philosophy',      sub:'Personal values',    x:0.83, y:0.10, type:'philosophical', color:COLORS.purple,    size:13, tag:'Philosophical · Personal',           title:'Your cull philosophy',                 body:'How you manage the cull is not just logistical. It reflects what you believe about land, food, and your relationship with the local community. That philosophy shapes who you work with and how.',                                                                                                                               question:'Is your stalking approach aligned with your wider values — and have you communicated that clearly to anyone you plan to work with?' },
+  { id:'venison',   label:'Local venison',        sub:'Stacking benefit',   x:0.83, y:0.47, type:'ecological',   color:COLORS.mossLight,  size:13, tag:'Stacking benefit · Commercial + Local', title:'Local venison as a revenue stream',  body:'The cull produces venison. If managed with local stalkers, that venison can enter local food systems — generating modest income, reducing food miles, and embedding the project in the local economy.',                                                                                                     question:'Have you explored whether the venison from your cull could become a project revenue line — and what infrastructure that would require?' },
+  { id:'grazers',   label:'Grazing animals',      sub:'Regen management',   x:0.17, y:0.47, type:'logistical',   color:COLORS.amber,      size:15, tag:'Logistical · Ecological dependency', title:'Introducing grazers for regeneration', body:'Natural regeneration inside a deer fence often requires grazing pressure to manage competitive vegetation. If you do not own cattle or sheep, you need a relationship with a local farmer — on terms that may shift over decades.',                                                                              question:'Do you own the grazers you need, or do you depend on a local farming relationship — and how secure is that arrangement long-term?' },
+  { id:'soilwater', label:'Soil and water',       sub:'Stacking benefit',   x:0.17, y:0.68, type:'ecological',   color:COLORS.mossLight,  size:13, tag:'Stacking benefit · Ecological',      title:'Soil structure and water regulation',  body:'Grazers managed well improve soil structure, increase water infiltration, and reduce runoff. These benefits compound over time and may be measurable against biodiversity or water quality outcome frameworks.',                                                                                                    question:'Are you capturing the soil and water benefits of your grazing approach in your monitoring framework — or leaving value on the table?' },
+  { id:'carbon',    label:'Carbon sequestration', sub:'Stacking benefit',   x:0.5,  y:0.74, type:'ecological',   color:COLORS.mossLight,  size:16, tag:'Stacking benefit · Carbon + Biodiversity', title:'Carbon sequestration',             body:'Woodland regeneration sequesters carbon across decades. But the carbon credit timeline does not match the investment timeline. Understanding when carbon revenue flows — and how it stacks with biodiversity payments — is essential for the investment case.',                                                   question:'Does your financial model show when carbon revenue arrives relative to your upfront costs — and is that gap fundable?' },
+  { id:'inflation', label:'Inflation risk',       sub:'30-year exposure',   x:0.17, y:0.10, type:'commercial',   color:COLORS.slate,      size:13, tag:'Commercial · 30-year risk',          title:'Inflation and remote labour costs',    body:'A maintenance budget built on today\'s costs will be wrong by year ten. Remote locations compound this — labour and materials cost more to source, and that premium tends to grow over time.',                                                                                                                         question:'It is worth stress-testing your maintenance budget against inflation scenarios — particularly for remote procurement where costs compound fastest.' },
+  { id:'monitoring',label:'Monitoring',           sub:'Accountability',     x:0.5,  y:0.91, type:'commercial',   color:COLORS.slateLight, size:13, tag:'Commercial · Accountability',        title:'Monitoring and adaptive management',   body:'Every outcome you claim requires evidence. The monitoring framework is not a reporting burden — it is the mechanism that tells you whether the plan is working and gives you the basis to adapt.',                                                                                                                    question:'Who is responsible for monitoring in year twenty — and is that written into the plan, or assumed?' },
+];
+
+const edges = [
+  { from:'fence',    to:'regen',      type:'dependency' },
+  { from:'fence',    to:'repair',     type:'dependency' },
+  { from:'fence',    to:'stalking',   type:'dependency' },
+  { from:'fence',    to:'inflation',  type:'dependency' },
+  { from:'stalking', to:'philosophy', type:'dependency' },
+  { from:'stalking', to:'venison',    type:'stacking'   },
+  { from:'regen',    to:'grazers',    type:'dependency' },
+  { from:'regen',    to:'carbon',     type:'stacking'   },
+  { from:'regen',    to:'monitoring', type:'dependency' },
+  { from:'grazers',  to:'soilwater',  type:'stacking'   },
+  { from:'soilwater',to:'carbon',     type:'stacking'   },
+  { from:'carbon',   to:'monitoring', type:'dependency' },
+  { from:'venison',  to:'monitoring', type:'stacking'   },
+];
+
+const canvas  = document.getElementById('map-canvas');
+const ctx     = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+const ttTag   = document.getElementById('tt-tag');
+const ttTitle = document.getElementById('tt-title');
+const ttBody  = document.getElementById('tt-body');
+const ttQuestion = document.getElementById('tt-question');
+
+let W, H, dpr, hoveredNode = null;
+
+function resize() {
+  const wrap = document.getElementById('canvas-wrap');
+  W = wrap.clientWidth;
+  H = Math.round(W * 0.72);
+  dpr = window.devicePixelRatio || 1;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+  draw();
+}
+
+function nodePos(n) { return { x: n.x * W, y: n.y * H }; }
+
+function drawEdge(a, b, type, highlighted) {
+  const pa = nodePos(a), pb = nodePos(b);
+  const dx = pb.x - pa.x, dy = pb.y - pa.y;
+  const mx = (pa.x + pb.x) / 2 + dy * 0.15;
+  const my = (pa.y + pb.y) / 2 - dx * 0.15;
+  ctx.beginPath();
+  ctx.moveTo(pa.x, pa.y);
+  ctx.quadraticCurveTo(mx, my, pb.x, pb.y);
+  if (type === 'stacking') {
+    ctx.strokeStyle = highlighted ? COLORS.amberLight : 'rgba(180,130,60,0.32)';
+    ctx.lineWidth = highlighted ? 1.8 : 1.5;
+    ctx.setLineDash([5, 4]);
+  } else {
+    ctx.strokeStyle = highlighted ? 'rgba(200,191,168,0.9)' : 'rgba(200,191,168,0.45)';
+    ctx.lineWidth = highlighted ? 1.5 : 1;
+    ctx.setLineDash([]);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+  if (highlighted) {
+    const t = 0.85;
+    const ax = (1-t)*(1-t)*pa.x + 2*(1-t)*t*mx + t*t*pb.x;
+    const ay = (1-t)*(1-t)*pa.y + 2*(1-t)*t*my + t*t*pb.y;
+    const angle = Math.atan2(pb.y - ay, pb.x - ax);
+    ctx.beginPath();
+    ctx.moveTo(pb.x - Math.cos(angle)*9 + Math.sin(angle)*3.5, pb.y - Math.sin(angle)*9 - Math.cos(angle)*3.5);
+    ctx.lineTo(pb.x, pb.y);
+    ctx.lineTo(pb.x - Math.cos(angle)*9 - Math.sin(angle)*3.5, pb.y - Math.sin(angle)*9 + Math.cos(angle)*3.5);
+    ctx.strokeStyle = type === 'stacking' ? COLORS.amber : COLORS.border;
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+  }
+}
+
+function drawNode(n, hovered) {
+  const { x, y } = nodePos(n);
+  const r = n.size;
+  if (hovered) {
+    ctx.beginPath(); ctx.arc(x, y, r + 6, 0, Math.PI * 2);
+    ctx.fillStyle = n.color + '1a'; ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2);
+    ctx.strokeStyle = n.color + '55'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = hovered ? n.color : n.color + 'cc'; ctx.fill();
+  ctx.beginPath(); ctx.arc(x, y - r * 0.2, r * 0.4, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.1)'; ctx.fill();
+
+  ctx.fillStyle = hovered ? COLORS.ink : COLORS.peat;
+  const fontSize = Math.max(8.5, r * 0.52);
+  ctx.font = `${hovered ? '500' : '300'} ${fontSize}px 'DM Sans', sans-serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  const labelY = y + r + 5;
+  ctx.fillText(n.label, x, labelY);
+  ctx.fillStyle = COLORS.muted;
+  ctx.font = `300 ${Math.max(7.5, r * 0.42)}px 'DM Sans', sans-serif`;
+  ctx.fillText(n.sub, x, labelY + fontSize + 2);
+}
+
+function getConnectedEdges(id) { return edges.filter(e => e.from === id || e.to === id); }
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(200,191,168,0.06)';
+  for (let i = 0; i < 50; i++) {
+    ctx.beginPath();
+    ctx.arc((i * 137.5) % W, (i * 89.3) % H, 1, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  const connEdges = hoveredNode ? getConnectedEdges(hoveredNode.id) : [];
+  const connIds   = new Set(connEdges.flatMap(e => [e.from, e.to]));
+  edges.forEach(e => {
+    const a = nodes.find(n => n.id === e.from), b = nodes.find(n => n.id === e.to);
+    const connected = hoveredNode && (e.from === hoveredNode.id || e.to === hoveredNode.id);
+    if (!hoveredNode || !connected) drawEdge(a, b, e.type, false);
+  });
+  connEdges.forEach(e => {
+    drawEdge(nodes.find(n => n.id === e.from), nodes.find(n => n.id === e.to), e.type, true);
+  });
+  nodes.forEach(n => {
+    const isHovered = hoveredNode && hoveredNode.id === n.id;
+    const isDimmed  = hoveredNode && !connIds.has(n.id) && !isHovered;
+    ctx.globalAlpha = isDimmed ? 0.3 : 1;
+    drawNode(n, isHovered);
+    ctx.globalAlpha = 1;
+  });
+}
+
+function getNodeAt(mx, my) {
+  for (const n of nodes) {
+    const { x, y } = nodePos(n);
+    if (Math.sqrt((mx-x)**2 + (my-y)**2) < n.size + 8) return n;
+  }
+  return null;
+}
+
+function showTooltip(n, mx, my) {
+  const tagColors = { ecological:COLORS.moss, commercial:COLORS.slate, logistical:COLORS.amber, philosophical:COLORS.purple };
+  ttTag.style.color = tagColors[n.type] || COLORS.muted;
+  ttTag.textContent = n.tag; ttTitle.textContent = n.title;
+  ttBody.textContent = n.body; ttQuestion.textContent = n.question;
+  tooltip.classList.add('visible');
+  let tx = mx + 14, ty = my - 8;
+  if (tx + 250 > W) tx = mx - 254;
+  const ttH = 270;
+  if (ty + ttH > H) ty = my - ttH - 8;
+  if (ty < 0) ty = 8;
+  tooltip.style.left = tx + 'px'; tooltip.style.top = ty + 'px';
+}
+
+function hideTooltip() { tooltip.classList.remove('visible'); }
+
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  const n = getNodeAt(mx, my);
+  if (n !== hoveredNode) { hoveredNode = n; draw(); }
+  if (n) { canvas.style.cursor = 'pointer'; showTooltip(n, mx, my); }
+  else   { canvas.style.cursor = 'default';  hideTooltip(); }
+});
+
+canvas.addEventListener('mouseleave', () => { hoveredNode = null; draw(); hideTooltip(); });
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const r = canvas.getBoundingClientRect(), t = e.touches[0];
+  const mx = t.clientX - r.left, my = t.clientY - r.top;
+  const n = getNodeAt(mx, my);
+  hoveredNode = n; draw();
+  if (n) showTooltip(n, mx, my); else hideTooltip();
+}, { passive: false });
+
+window.addEventListener('resize', resize);
+resize();
+</script>
+</body>
+</html>
