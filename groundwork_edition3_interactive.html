@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ground Work: Edition 3, Two Systems, Three Horizons</title>
+<style>
+  :root{
+    --bg:#f2ede1;
+    --card:#faf7ef;
+    --card-border:#ddd5be;
+    --ink:#2b2620;
+    --ink-soft:#635c4e;
+    --green:#33513f;
+    --h1-color:#9b9384;
+    --h2-color:#bd7f3a;
+    --h3-color:#3f6656;
+    --rule:#2b2620;
+    --accent:#b8763a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Helvetica Neue', Arial, sans-serif;
+    padding:2.5rem 1.5rem 4rem;
+  }
+  .wrap{max-width:1200px;margin:0 auto;}
+
+  header.page-head{margin-bottom:2rem;}
+  header.page-head p.kicker{
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    margin:0 0 .4rem;
+  }
+  header.page-head h1{
+    font-family:Georgia, 'Times New Roman', serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:2rem;
+    color:var(--green);
+    margin:0 0 .5rem;
+  }
+  header.page-head p.sub{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:.95rem;
+    max-width:640px;
+    line-height:1.5;
+  }
+
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    padding-bottom:.9rem;
+    margin-bottom:.9rem;
+  }
+  .legend-items{display:flex;flex-wrap:wrap;gap:1.4rem;}
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:.85rem;
+    color:var(--ink);
+    cursor:pointer;
+    padding:.2rem 0;
+    opacity:.55;
+    transition:opacity .15s ease;
+  }
+  .legend-item.active,.legend-item:hover{opacity:1;}
+  .legend-item svg{display:block;}
+  .legend-hint{
+    font-size:.82rem;
+    color:var(--accent);
+    font-style:italic;
+  }
+  .rule{border:none;border-top:1px solid var(--rule);margin:0 0 1.8rem;}
+
+  .panels{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2.5rem;
+  }
+  @media (max-width:860px){
+    .panels{grid-template-columns:1fr;}
+  }
+
+  .panel-head h2{
+    font-family:Georgia,'Times New Roman',serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:1.7rem;
+    color:var(--green);
+    margin:0 0 .2rem;
+  }
+  .panel-head p{
+    margin:0 0 1rem;
+    font-size:.78rem;
+    letter-spacing:.03em;
+    color:var(--ink-soft);
+  }
+  .panel-head p .tag{
+    font-weight:700;
+    letter-spacing:.08em;
+  }
+
+  .chart-frame{position:relative;}
+  .chart-frame svg{width:100%;height:auto;display:block;overflow:visible;}
+  .you-are-here-label{
+    font-size:11px;
+    fill:var(--ink-soft);
+    font-family:'Helvetica Neue', Arial, sans-serif;
+  }
+  .axis-line{stroke:var(--rule);stroke-width:1;}
+  .axis-label{
+    font-size:11px;
+    fill:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    font-family:'Helvetica Neue', Arial, sans-serif;
+  }
+  .horizon-label{
+    font-family:Georgia,'Times New Roman',serif;
+    font-style:italic;
+    font-size:15px;
+  }
+  .curve{
+    fill:none;
+    cursor:pointer;
+    transition:stroke-width .15s ease, opacity .15s ease;
+  }
+  .curve.dimmed{opacity:.35;}
+  .curve.h1{stroke:var(--h1-color);stroke-width:2.5;stroke-dasharray:6 5;}
+  .curve.h2{stroke:var(--h2-color);stroke-width:3;}
+  .curve.h3{stroke:var(--h3-color);stroke-width:3;}
+  .curve.selected{stroke-width:4.5;}
+  .hit{fill:none;stroke:transparent;stroke-width:16;cursor:pointer;}
+
+  .detail{
+    margin-top:1.4rem;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:2px;
+    padding:1.3rem 1.4rem;
+    min-height:9.5rem;
+  }
+  .detail h3{
+    margin:0 0 .6rem;
+    font-size:.78rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .detail h3.h1{color:var(--h1-color);}
+  .detail h3.h2{color:var(--h2-color);}
+  .detail h3.h3{color:var(--h3-color);}
+  .detail p{
+    margin:0 0 .8rem;
+    font-size:.95rem;
+    line-height:1.55;
+    color:var(--ink);
+  }
+  .detail p:last-child{margin-bottom:0;}
+  .detail .branch-label{font-weight:700;}
+
+  footer.note{
+    margin-top:2.5rem;
+    font-size:.78rem;
+    color:var(--ink-soft);
+    max-width:720px;
+    line-height:1.5;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <p class="kicker">Ground Work, Edition 3 · Interactive</p>
+    <h1>Two systems, three horizons</h1>
+    <p class="sub">England and Scotland, laid out against the same Three Horizons model: the old pattern, the messy present, and what could come next. Click a line to explore a horizon on either side.</p>
+  </header>
+
+  <div class="legend">
+    <div class="legend-items" id="legend">
+      <button class="legend-item active" data-horizon="1" aria-pressed="true">
+        <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#9b9384" stroke-width="2.5" stroke-dasharray="6 5"/></svg>
+        Horizon 1: the old pattern
+      </button>
+      <button class="legend-item" data-horizon="2" aria-pressed="false">
+        <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#bd7f3a" stroke-width="3"/></svg>
+        Horizon 2: the messy present
+      </button>
+      <button class="legend-item" data-horizon="3" aria-pressed="false">
+        <svg width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#3f6656" stroke-width="3"/></svg>
+        Horizon 3: what could come next
+      </button>
+    </div>
+    <span class="legend-hint">click a line ›</span>
+  </div>
+  <hr class="rule">
+
+  <div class="panels">
+
+    <!-- ENGLAND -->
+    <section class="panel" data-country="england">
+      <div class="panel-head">
+        <h2>England</h2>
+        <p><span class="tag">MANDATORY</span>, further into its own transition</p>
+      </div>
+      <div class="chart-frame">
+        <svg viewBox="0 0 640 300" role="img" aria-label="England three horizons chart">
+          <line class="axis-line" x1="40" y1="260" x2="620" y2="260"></line>
+          <line x1="250" y1="20" x2="250" y2="260" stroke="#2b2620" stroke-width="1" stroke-dasharray="2 4"></line>
+          <text class="you-are-here-label" x="256" y="30">you are here</text>
+
+          <path class="curve h1" data-horizon="1" d="M40,70 C150,110 300,160 450,205 C500,220 560,235 620,245"></path>
+          <path class="hit" data-horizon="1" d="M40,70 C150,110 300,160 450,205 C500,220 560,235 620,245"></path>
+
+          <path class="curve h2 selected" data-horizon="2" d="M40,250 C100,150 180,70 250,65 C320,60 420,110 500,150 C550,175 590,195 620,205"></path>
+          <path class="hit" data-horizon="2" d="M40,250 C100,150 180,70 250,65 C320,60 420,110 500,150 C550,175 590,195 620,205"></path>
+
+          <path class="curve h3" data-horizon="3" d="M40,255 C120,255 200,250 260,235 C340,210 420,140 500,90 C550,65 590,50 620,45"></path>
+          <path class="hit" data-horizon="3" d="M40,255 C120,255 200,250 260,235 C340,210 420,140 500,90 C550,65 590,50 620,45"></path>
+
+          <text class="horizon-label" x="595" y="240" fill="#9b9384">H1</text>
+          <text class="horizon-label" x="470" y="55" fill="#bd7f3a">H2</text>
+          <text class="horizon-label" x="558" y="70" fill="#3f6656">H3</text>
+
+          <text class="axis-label" x="40" y="282">no obligation to nature</text>
+          <text class="axis-label" x="620" y="282" text-anchor="end">nature at scale</text>
+        </svg>
+      </div>
+      <div class="detail" id="detail-england">
+        <!-- filled by JS -->
+      </div>
+    </section>
+
+    <!-- SCOTLAND -->
+    <section class="panel" data-country="scotland">
+      <div class="panel-head">
+        <h2>Scotland</h2>
+        <p><span class="tag">VOLUNTARY</span>, earlier in its own transition</p>
+      </div>
+      <div class="chart-frame">
+        <svg viewBox="0 0 640 300" role="img" aria-label="Scotland three horizons chart">
+          <line class="axis-line" x1="40" y1="260" x2="620" y2="260"></line>
+          <line x1="200" y1="20" x2="200" y2="260" stroke="#2b2620" stroke-width="1" stroke-dasharray="2 4"></line>
+          <text class="you-are-here-label" x="206" y="30">you are here</text>
+
+          <path class="curve h1" data-horizon="1" d="M40,95 C150,120 300,150 450,180 C520,195 580,205 620,215"></path>
+          <path class="hit" data-horizon="1" d="M40,95 C150,120 300,150 450,180 C520,195 580,205 620,215"></path>
+
+          <path class="curve h2 selected" data-horizon="2" d="M40,255 C90,190 130,120 200,100 C280,80 360,90 430,105 C500,115 560,120 620,130"></path>
+          <path class="hit" data-horizon="2" d="M40,255 C90,190 130,120 200,100 C280,80 360,90 430,105 C500,115 560,120 620,130"></path>
+
+          <path class="curve h3" data-horizon="3" d="M40,258 C150,258 280,255 380,245 C440,235 480,210 520,180 C560,150 590,140 620,132"></path>
+          <path class="hit" data-horizon="3" d="M40,258 C150,258 280,255 380,245 C440,235 480,210 520,180 C560,150 590,140 620,132"></path>
+
+          <text class="horizon-label" x="595" y="205" fill="#9b9384">H1</text>
+          <text class="horizon-label" x="252" y="95" fill="#bd7f3a">H2</text>
+          <text class="horizon-label" x="470" y="225" fill="#3f6656">H3</text>
+
+          <text class="axis-label" x="40" y="282">managed by whoever holds it</text>
+          <text class="axis-label" x="620" y="282" text-anchor="end">nature at scale</text>
+        </svg>
+      </div>
+      <div class="detail" id="detail-scotland">
+        <!-- filled by JS -->
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="note">
+    Relative positions are illustrative, drawn to make the shape of each transition legible: they are not independently verified data. This tool accompanies "Two clocks, one island," edition 3 of Ground Work, The Long Game.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var content = {
+    england: {
+      1: {
+        title: "Horizon 1: the old pattern",
+        html: "<p>Development guided by the NPPF's call for &lsquo;no net loss&rsquo;: an aim, not a metric. There was no consistent tool to quantify it, and next to no funding for local authorities to enforce it. Once a scheme was built, what the ecologist recommended rarely got followed up on, except where European Protected Species were involved, and even then the fines were often cheaper than the cost of doing the survey properly.</p><p>The mandate didn't just raise the ambition. It gave the aim a metric and legal teeth it never had.</p>"
+      },
+      2: {
+        title: "Horizon 2: the messy present",
+        html: "<p>Biodiversity Net Gain is now mandatory law: a 10% gain, measured against a statutory metric, on a legal clock that started running whether the market was ready or not. Registered habitat banks have grown fast since, but most of what's been built is the cheapest habitat to create, not the scarcest habitat nature actually needs.</p><p>What's still missing is the incentive to build speculatively, ahead of a confirmed buyer, the market prices that anticipatory work as risk, not opportunity.</p>"
+      },
+      3: {
+        title: "Horizon 3: what could come next",
+        html: "<p><span class='branch-label'>If this holds:</span> the incentive corrects itself as the market matures, and nature gets created ahead of need, not only in reaction to a developer's clock.</p><p><span class='branch-label'>If it fails:</span> this horizon becomes permanent: a market that's busy and growing, and still only ever reactive, delivering habitat once a developer's purchase forces it, never before.</p>"
+      }
+    },
+    scotland: {
+      1: {
+        title: "Horizon 1: the old pattern",
+        html: "<p>Land managed by whoever holds it. Restoration happened because a landholder chose it, not because any system required it. No metric, no registry, no obligation running in the background.</p>"
+      },
+      2: {
+        title: "Horizon 2: where Scotland sits today",
+        html: "<p>Recent planning policy has nudged this first horizon, enhancement rather than net gain, without replacing it. A handful of the largest buyers are each building their own bespoke metric, because no national one exists yet. Landowners and facilitators are building relationships and reputations years ahead of any formal system, and land prices are rising as capital arrives before the rules that would discipline it.</p>"
+      },
+      3: {
+        title: "Horizon 3: what could come next",
+        html: "<p><span class='branch-label'>If this holds:</span> a formal market opens, carrying more of the trust that gets built when relationships come before rules, something a mandate switched on overnight doesn't have time to build.</p><p><span class='branch-label'>If it fails:</span> either transaction volume stays too thin to justify the professional capacity a mature market needs, or the peer-to-peer relationships built on years of trust become the norm within the formal system, without ever becoming widespread enough to open it up.</p>"
+      }
+    }
+  };
+
+  var globalHorizon = 2; // default shared state
+  var perPanelOverride = { england: null, scotland: null };
+
+  function activeHorizonFor(country){
+    return perPanelOverride[country] || globalHorizon;
+  }
+
+  function render(){
+    ['england','scotland'].forEach(function(country){
+      var h = activeHorizonFor(country);
+      var data = content[country][h];
+      var el = document.getElementById('detail-' + country);
+      el.innerHTML = '<h3 class="h' + h + '">' + data.title + '</h3>' + data.html;
+
+      var panel = document.querySelector('.panel[data-country="' + country + '"]');
+      panel.querySelectorAll('.curve').forEach(function(curve){
+        var ch = curve.getAttribute('data-horizon');
+        if (String(h) === ch) {
+          curve.classList.add('selected');
+          curve.classList.remove('dimmed');
+        } else {
+          curve.classList.remove('selected');
+          curve.classList.add('dimmed');
+        }
+      });
+    });
+
+    document.querySelectorAll('.legend-item').forEach(function(btn){
+      var isActive = String(globalHorizon) === btn.getAttribute('data-horizon') &&
+                     !perPanelOverride.england && !perPanelOverride.scotland;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
+  document.getElementById('legend').addEventListener('click', function(e){
+    var btn = e.target.closest('.legend-item');
+    if (!btn) return;
+    globalHorizon = parseInt(btn.getAttribute('data-horizon'), 10);
+    perPanelOverride.england = null;
+    perPanelOverride.scotland = null;
+    render();
+  });
+
+  document.querySelectorAll('.panel').forEach(function(panel){
+    var country = panel.getAttribute('data-country');
+    panel.querySelectorAll('.hit').forEach(function(hit){
+      hit.addEventListener('click', function(){
+        perPanelOverride[country] = parseInt(hit.getAttribute('data-horizon'), 10);
+        render();
+      });
+    });
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
